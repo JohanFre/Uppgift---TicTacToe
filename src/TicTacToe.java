@@ -5,6 +5,8 @@ public class TicTacToe {
 
 	static String[] board;
 	static String turn;
+	static String winner = null;
+	static Scanner in = new Scanner(System.in);
 
 	static String checkWinner() {
 		for (int a = 0; a < 8; a++) {
@@ -41,13 +43,13 @@ public class TicTacToe {
 			} else if (line.equals("OOO")) {
 				return "O";
 			}
-			
+
 		}
 		for (int a = 0; a < 9; a++) {
-			if (Arrays.asList(board).contains(String.valueOf(a+1))) {
+			if (Arrays.asList(board).contains(String.valueOf(a + 1))) {
 				break;
-			}
-			else if (a == 8) return "draw";
+			} else if (a == 8)
+				return "draw";
 		}
 		System.out.println(turn + "'s turn; enter a slot number to place " + turn + " in:");
 		return null;
@@ -62,26 +64,61 @@ public class TicTacToe {
 	}
 
 	public static void main(String[] args) {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
 		board = new String[9];
 		turn = "X";
-		String winner = null;
 
 		for (int a = 0; a < 9; a++) {
 			board[a] = String.valueOf(a + 1);
 		}
 
 		System.out.println("Welcome to Tic Tac Toe.");
+		System.out.println("To reset board: Enter 0: ");
 		printBoard();
 
 		System.out.println("X will play first. Enter a slot number to place X in:");
 
+		startGame();
+
+		int numInput = in.nextInt();
+
+		if (numInput == 0) {
+			restartGame();
+		}
+		
+
+
+	}
+	
+	static void restartGame() {
+		for (int a = 0; a < 9; a++) {
+			board[a] = String.valueOf(a + 1);
+		}
+		winner = null;
+		System.out.println("Game has been restarted");
+		if (turn.equals("X")) {
+			turn = "O";
+		} else {
+			turn = "X";
+		}
+		System.out.println(turn + "'s will play first. Enter a slot number to place " + turn + " in:");
+		printBoard();
+		startGame();
+	}
+
+	private static void startGame() {
 		while (winner == null) {
-			
+
 			int numInput = in.nextInt();
 
-			if (board[numInput - 1].equals(String.valueOf(numInput))) {
+			if (numInput == 0) {
+				for (int a = 0; a < 9; a++) {
+					board[a] = String.valueOf(a + 1);
+				}
+				printBoard();
+				System.out.println("X will play first. Enter a slot number to place X in:");
+			}
+
+			else if (board[numInput - 1].equals(String.valueOf(numInput))) {
 				board[numInput - 1] = turn;
 
 				if (turn.equals("X")) {
@@ -96,11 +133,23 @@ public class TicTacToe {
 				System.out.println("Slot already taken; re-enter slot number:");
 
 			}
+
 		}
 		if (winner.equalsIgnoreCase("draw")) {
 			System.out.println("It's a draw! Thanks for playing.");
+			System.out.println("To play again: ENTER 0:");
+			int numInput = in.nextInt();
+			if(numInput == 0) {
+				restartGame();
+			}
 		} else {
 			System.out.println("Congratulations! " + winner + " have won! Thanks for playing.");
+			System.out.println("To play again: ENTER 0:");
+			int numInput = in.nextInt();
+			if(numInput == 0) {
+				restartGame();
+			}
 		}
+		
 	}
 }
